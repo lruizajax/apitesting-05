@@ -1,0 +1,8 @@
+Add Repo Status: 201
+✅ Repositorio creado: https://github.com/lruizajax/repo-1761276893909
+Add User 1 Status: 201
+✅ Invitación enviada a: admin1
+🔗 URL de invitación: https://github.com/lruizajax/repo-1761276893909/invitations
+Add User 2 Status: 201
+✅ Invitación enviada a: admin2
+🔗 URL de invitación: https://github.com/lruizajax/repo-1761276893909/invitations

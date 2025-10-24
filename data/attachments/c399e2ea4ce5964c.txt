@@ -1,0 +1,5 @@
+✅ Repositorio creado: https://github.com/lruizajax/repo-test-1761276895235
+👥 user1 agregado al repositorio: repo-test-1761276895235 
+👥 user2 agregado al repositorio: repo-test-1761276895235 
+📋 Colaboradores actuales: [ 'lruizajax' ]
+🧹 Repositorio eliminado correctamente: repo-test-1761276895235
