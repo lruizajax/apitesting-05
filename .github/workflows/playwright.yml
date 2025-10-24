@@ -35,7 +35,7 @@ jobs:
       run: echo "GITHUB_TOKEN=${{ secrets.PERSONAL_GITHUB_TOKEN }}" >> .env
         
       # Run Playwright tests
-    - name: Run Playwright tests wirh allure report`
+    - name: Run Playwright tests wirh allure report
       run: npx playwright test --reporter=line,allure-playwright
       
       #generete allure report
