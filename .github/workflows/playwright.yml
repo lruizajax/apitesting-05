@@ -4,54 +4,60 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+
 permissions:
-  contents: write # public en gitgub actions need this to upload artifacts
+  contents: write  # ✅ Necesario para publicar en GitHub Pages
+
 jobs:
   test:
-    timeout-minutes: 60
     runs-on: ubuntu-latest
+    timeout-minutes: 60
 
     steps:
-      # Checkout repository
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-      # Setup Node.js
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-      
-      # Install dependencies
-    - name: Install dependencies
-      run: npm ci
+      # Clonar repositorio
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      # Install Playwright browsers
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      # Configurar Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
 
-      #setup .env file
-    - name: Setup .env file
-      run: echo "GITHUB_TOKEN=${{ secrets.PERSONAL_GITHUB_TOKEN }}" >> .env
-        
-      # Run Playwright tests
-    - name: Run Playwright tests wirh allure report
-      run: npx playwright test --reporter=line,allure-playwright
-      
-      #generete allure report
-    - name: Generate Allure Report Artifact
-      if: ${{ !cancelled() }}
-      uses: actions/upload-artifact@v4
-      with:
-        name: allure-report
-        path: allure-report/s
-        retention-days: 15
+      # Instalar dependencias
+      - name: Install dependencies
+        run: npm ci
 
-      # publish allure report
-    - name: Publish Allure Report to github pages
-      if: ${{ !cancelled() }}
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
-        publish_dir: ./allure-report
-        publish_branch: gh-pages
+      # Instalar navegadores de Playwright (aunque uses API)
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      # Crear archivo .env con el token de GitHub
+      - name: Create .env file
+        run: echo "GITHUB_TOKEN=${{ secrets.PERSONAL_GITHUB_TOKEN }}" > .env
+
+      # Ejecutar pruebas con reporter Allure
+      - name: Run Playwright tests with Allure
+        run: npx playwright test --reporter=line,allure-playwright
+
+      # Generar el reporte Allure
+      - name: Generate Allure Report
+        run: npx allure generate allure-results --clean -o allure-report
+
+      # Subir artefactos (Playwright + Allure)
+      - name: Upload Allure Report artifact
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report/
+          retention-days: 15
+
+      # Publicar el reporte Allure en GitHub Pages
+      - name: Deploy Allure Report to GitHub Pages
+        if: ${{ !cancelled() }}
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+          publish_dir: ./allure-report
+          publish_branch: gh-pages
